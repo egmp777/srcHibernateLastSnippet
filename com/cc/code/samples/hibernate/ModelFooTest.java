@@ -9,9 +9,7 @@ import org.junit.Test;
 
 public class ModelFooTest {
 
-	@BeforeClass
-	public static void setUpBeforeClass() throws Exception {
-	}
+	
 
 	@Test
 	public final void testGetFoos() {

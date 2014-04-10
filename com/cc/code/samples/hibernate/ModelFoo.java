@@ -16,11 +16,12 @@ import org.hibernate.cfg.Configuration;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
+import com.cc.example.hibernate.*;;
 
 public class ModelFoo {
 
 	public ModelFoo() {
-		// TODO Auto-generated constructor stub
+		
 	}
 	
 	public List<Foo> getFoos(long minId, long maxId){
@@ -35,14 +36,12 @@ public class ModelFoo {
 		List<Foo> fooList = new ArrayList();  
 		try{
 			sess.beginTransaction();
-			Criteria criteria = sess.createCriteria(Foo.class, "FOO");
 			Criteria criteriaCount = sess.createCriteria(Foo.class, "FOO");
-			criteria.add(Restrictions.between("id",minId, maxId));
-			criteria.addOrder(Order.asc("id"));
-			criteriaCount.add(Restrictions.between("id",minId, maxId));
-			criteriaCount.addOrder(Order.asc("id"));
 			criteriaCount.setProjection(Projections.rowCount());
-			Long count= (Long)criteriaCount.uniqueResult();
+			Long count = (Long)criteriaCount.uniqueResult();
+			Criteria criteria = sess.createCriteria(Foo.class, "FOO");
+			criteria.add(Restrictions.between("id",minId, maxId));
+			criteria.addOrder(Order.asc("id"));		
 			while (pageNumber < count.intValue()){
 			   criteria.setFirstResult(pageNumber - 1);
 			   criteria.setMaxResults(pageSize);
