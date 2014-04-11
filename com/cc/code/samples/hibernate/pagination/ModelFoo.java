@@ -35,16 +35,20 @@ public class ModelFoo {
 		try{
 			sess.beginTransaction();
 			Criteria criteriaCount = sess.createCriteria(Foo.class, "FOO");
+			criteriaCount.add(Restrictions.between("id",minId, maxId));
 			criteriaCount.setProjection(Projections.rowCount());
 			Long count= (Long)criteriaCount.uniqueResult();
 			Criteria criteria = sess.createCriteria(Foo.class, "FOO");
 			criteria.add(Restrictions.between("id",minId, maxId));
 			criteria.addOrder(Order.asc("id"));
-			while (pageNumber < count.intValue()){
-			   criteria.setFirstResult(pageNumber - 1);
+			int totalEntities = 0;
+			while (totalEntities < count.intValue()){
+			   criteria.setFirstResult((pageNumber - 1)*pageSize);
 			   criteria.setMaxResults(pageSize);
 			   fooList.addAll(criteria.list());
-			   pageNumber += pageSize;
+			   totalEntities = fooList.size();
+			   pageNumber++;
+			   
 			}
 			for(Foo foo: fooList){
 				System.out.println("Total Results:" + fooList.size());
